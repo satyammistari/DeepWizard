@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "depthwizard"
+version = "0.1.0"
+description = "Single-image satellite RGB to metric DSM and 3D viewer"
+requires-python = ">=3.11"
+dependencies = [
+    "torch",
+    "torchvision",
+    "transformers",
+    "peft",
+    "rasterio",
+    "rio-cogeo",
+    "pyproj",
+    "shapely",
+    "opencv-python",
+    "pysolar",
+    "scipy",
+    "scikit-learn",
+    "numpy",
+    "fastapi",
+    "uvicorn[standard]",
+    "pydantic-settings",
+    "trimesh",
+    "pygltflib",
+    "laspy",
+    "h5py",
+    "matplotlib",
+    "pytest",
+]
+
+[tool.setuptools.packages.find]
+include = ["backend*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

@@ -1,0 +1,45 @@
+# DepthWizard — Project Rules
+
+## Context
+Building a pipeline that turns a single optical satellite RGB image into a
+metric Digital Surface Model (DSM), plus an interactive 3D flythrough viewer.
+This is for Smart India Hackathon. Scoring is 50% DSM accuracy (RMSE/MAE/
+correlation, stratified across urban/sparse/hilly/forested terrain) and
+50% visualization quality and standalone deployment.
+
+## Stack
+Backend: Python 3.11, PyTorch, rasterio, FastAPI, OpenCV, scipy
+Frontend: React 18 + TypeScript + Vite + Three.js (@react-three/fiber)
+Packaging: Tauri + PyInstaller
+
+## Non-negotiable rules
+1. NEVER silently drop or reproject geospatial metadata. CRS and affine
+   transform from input GeoTIFF must be preserved exactly in output.
+2. NEVER let nodata pixels become 0m. Mask them explicitly and propagate
+   the mask through every stage.
+3. All height values in metres. Document vertical datum (EGM96 geoid vs
+   WGS84 ellipsoid) in every function that touches elevation.
+4. Every model output ships with a per-pixel uncertainty estimate.
+5. No hardcoded paths. Config via pydantic Settings + .env.
+6. Any function doing array math over a full raster gets a docstring stating
+   input shape, dtype, units, and nodata convention.
+7. Type hints everywhere. numpy arrays annotated with shape in the docstring.
+8. No network calls at inference time in the packaged app — it must run
+   fully offline. All external data is fetched at build/prep time and cached.
+
+## Style
+- Small, testable functions. Prefer pure functions over classes with state.
+- Fail loudly with informative errors. Never return silently-wrong geometry.
+- Comments explain WHY, not WHAT.
+- Tests in pytest, colocated in tests/ mirroring the source tree.
+
+## Things that are easy to get wrong here — be careful
+- Depth models output INVERSE depth (disparity). Higher value = closer.
+  For satellite nadir imagery, closer = taller. Get the sign right and
+  assert it in tests.
+- Depth Anything runs at ~518px. Satellite images are much larger.
+  Tiled inference requires global scale alignment or you get seams.
+- SRTM/Copernicus are DSMs from radar; the phase centre sits inside forest
+  canopy, not on the ground and not at the treetop. Do not assume a simple
+  bias direction — document which product and which reference surface.
+- Shadow length -> height requires GSD. Georeferenced inputs only.

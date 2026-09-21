@@ -1,0 +1,4 @@
+# DepthWizard frontend
+node_modules
+dist
+*.local
