@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Literal
 
@@ -26,12 +26,16 @@ class RasterData:
     """
 
     array: np.ndarray
-    transform: Affine
-    crs: CRS | None
-    nodata: float | int | None
+    transform: Affine | None = None
+    crs: CRS | str | None = None
+    nodata: float | int | None = None
+    # Optional tags (vertical datum, DEM source, …). Never a substitute for crs.
+    metadata: dict[str, Any] = field(default_factory=dict)
 
     @property
     def bounds(self) -> BoundingBox:
+        if self.transform is None:
+            raise ValueError("RasterData.bounds requires an affine transform")
         height, width = self.array.shape[-2], self.array.shape[-1]
         west, south, east, north = array_bounds(height, width, self.transform)
         return BoundingBox(west, south, east, north)

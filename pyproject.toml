@@ -32,6 +32,13 @@ dependencies = [
     "pytest",
 ]
 
+[project.scripts]
+depthwizard-api = "backend.cli:api_main"
+depthwizard-validate = "backend.cli:validate_main"
+depthwizard-prefetch-dem = "backend.cli:prefetch_dem_main"
+depthwizard-export = "backend.cli:export_main"
+depthwizard-train = "backend.cli:train_main"
+
 [tool.setuptools.packages.find]
 include = ["backend*"]
 

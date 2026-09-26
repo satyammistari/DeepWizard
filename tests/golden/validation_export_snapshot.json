@@ -1,0 +1,32 @@
+{
+  "image_size": 64,
+  "artifacts": [
+    {
+      "name": "preview",
+      "path": "preview.png",
+      "sha256": "ad3d92a33d5e7480ffec17b96da3df67a2e986a4bd45e6f0cd77edf3c284cd79",
+      "size_bytes": 84
+    },
+    {
+      "name": "tile_predict",
+      "path": "tile_predict.png",
+      "sha256": "ad3d92a33d5e7480ffec17b96da3df67a2e986a4bd45e6f0cd77edf3c284cd79",
+      "size_bytes": 84
+    }
+  ],
+  "validation": {
+    "image_size": 64,
+    "stages": [
+      {
+        "name": "preview",
+        "ok": true,
+        "status_code": 200
+      },
+      {
+        "name": "tile_predict",
+        "ok": true,
+        "status_code": 200
+      }
+    ]
+  }
+}
